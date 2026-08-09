@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian - GG CPA Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12213D;
+  --ink-soft:#243A5E;
+  --paper:#F8F7F4;
+  --paper-dim:#EFEEE9;
+  --steel:#3C5A78;
+  --slate:#5B6472;
+  --slate-light:#8A92A0;
+  --verified:#1D6E4D;
+  --verified-bg:#E6F0EA;
+  --review:#9C6B12;
+  --review-bg:#F6EEDD;
+  --locked:#5B4A82;
+  --locked-bg:#EDE9F3;
+  --danger:#9E3B3B;
+  --danger-bg:#F4E7E6;
+  --line:#E4E2DC;
+  --line-strong:#CFCCC3;
+  --white:#FFFFFF;
+  --shadow: 0 1px 2px rgba(18,33,61,0.06), 0 6px 20px rgba(18,33,61,0.07);
+  --shadow-lg: 0 10px 34px rgba(18,33,61,0.16);
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;}
+h1,h2,h3,.display{font-family:'Fraunces',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+button{font-family:inherit;cursor:pointer;}
+a{color:inherit;}
+:focus-visible{outline:2px solid var(--steel);outline-offset:2px;}
+::selection{background:#9C6B1230;}
+
+#app{display:flex;min-height:100vh;}
+
+.sidebar{
+  width:248px;flex-shrink:0;background:var(--ink);color:#E9ECF3;
+  display:flex;flex-direction:column;padding:20px 0;position:sticky;top:0;height:100vh;
+}
+.brand{padding:0 20px 18px 20px;border-bottom:1px solid #24365A;margin-bottom:14px;}
+.brand-name{font-family:'Fraunces',serif;font-size:18px;font-weight:600;letter-spacing:0.01em;line-height:1.25;}
+.brand-sub{font-size:11px;color:#8B96AE;margin-top:4px;letter-spacing:0.02em;}
+
+.nav-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.09em;color:#7C88A2;padding:14px 20px 6px 20px;font-weight:600;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13.5px;color:#C6CBDA;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:background .12s;border-left:2px solid transparent;}
+.nav-item:hover{background:#1B2A47;color:#fff;}
+.nav-item.active{background:#1F2E4E;color:#fff;font-weight:500;border-left:2px solid #9C6B12;}
+
+.role-switch{margin:auto 20px 0 20px;padding-top:16px;border-top:1px solid #24365A;}
+.role-switch-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#7C88A2;margin-bottom:8px;font-weight:600;}
+.role-pill-group{display:flex;background:#182640;border-radius:7px;padding:3px;gap:2px;}
+.role-pill{flex:1;text-align:center;padding:6px 4px;font-size:11.5px;border-radius:5px;border:none;background:none;color:#9AA4BC;font-weight:600;transition:all .12s;}
+.role-pill.active{background:#9C6B12;color:#12213D;}
+.user-chip{display:flex;align-items:center;gap:9px;margin-top:14px;padding:8px 4px;}
+.avatar{width:29px;height:29px;border-radius:50%;background:#3C5A78;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;flex-shrink:0;}
+.user-chip-name{font-size:12.5px;font-weight:600;color:#EDEFF4;}
+.user-chip-role{font-size:10.5px;color:#8B93A0;}
+
+.firm-footer{padding:14px 20px 0 20px;margin-top:14px;border-top:1px solid #24365A;font-size:10.5px;color:#6E7A97;line-height:1.6;}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column;}
+.topbar{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 28px;justify-content:space-between;background:#fff;position:sticky;top:0;z-index:20;}
+.breadcrumb{font-size:12.5px;color:var(--slate-light);display:flex;align-items:center;gap:6px;}
+.breadcrumb b{color:var(--ink);font-weight:600;}
+.content{padding:28px;flex:1;overflow-y:auto;}
+
+.btn{border:1px solid var(--line-strong);background:#fff;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:6px;transition:all .12s;}
+.btn:hover{border-color:var(--ink);background:var(--paper-dim);}
+.btn-primary{background:var(--ink);color:#fff;border-color:var(--ink);}
+.btn-primary:hover{background:var(--ink-soft);}
+.btn-sm{padding:5px 10px;font-size:12px;border-radius:6px;}
+.btn-ghost{border-color:transparent;background:transparent;}
+.btn-ghost:hover{background:var(--paper-dim);border-color:transparent;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;}
+.badge-verified{background:var(--verified-bg);color:var(--verified);}
+.badge-review{background:var(--review-bg);color:var(--review);}
+.badge-locked{background:var(--locked-bg);color:var(--locked);}
+.badge-danger{background:var(--danger-bg);color:var(--danger);}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+.stat-num{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:var(--ink);}
+.stat-label{font-size:12px;color:var(--slate);margin-top:3px;}
+.stat-card.warn .stat-num{color:var(--review);}
+.stat-card.danger .stat-num{color:var(--danger);}
+
+.panel{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:20px;}
+.panel-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.panel-head h2{margin:0;font-size:16px;font-weight:600;}
+.panel-head-sub{font-size:12px;color:var(--slate);margin-top:2px;}
+.filter-tabs{display:flex;gap:2px;background:var(--paper-dim);border-radius:7px;padding:3px;}
+.filter-tab{border:none;background:none;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--slate);border-radius:5px;}
+.filter-tab.active{background:#fff;color:var(--ink);box-shadow:var(--shadow);}
+
+.queue-row{display:flex;align-items:center;padding:13px 20px;border-bottom:1px solid var(--line);gap:14px;cursor:pointer;transition:background .1s;}
+.queue-row:last-child{border-bottom:none;}
+.queue-row:hover{background:var(--paper-dim);}
+.priority-flag{width:3px;height:32px;border-radius:2px;flex-shrink:0;}
+.priority-flag.urgent{background:var(--danger);}
+.priority-flag.soon{background:var(--review);}
+.priority-flag.ok{background:var(--line-strong);}
+.queue-client{font-weight:600;font-size:13.5px;}
+.queue-meta{font-size:12px;color:var(--slate);margin-top:2px;}
+.queue-reason{font-size:11.5px;color:var(--slate);background:var(--paper-dim);padding:2px 8px;border-radius:5px;margin-left:auto;flex-shrink:0;}
+.queue-amount{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--slate);width:90px;text-align:right;flex-shrink:0;}
+.queue-arrow{color:var(--slate-light);flex-shrink:0;}
+
+.review-layout{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start;}
+.field-group{background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:16px;position:relative;}
+.field-group-head{padding:13px 18px;border-bottom:1px solid var(--line);font-weight:600;font-size:13.5px;color:var(--ink-soft);}
+.field-row{display:flex;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line);gap:12px;position:relative;}
+.field-row:last-child{border-bottom:none;}
+.field-label{flex:1;font-size:13px;color:var(--slate);}
+.field-value-wrap{display:flex;align-items:center;gap:8px;}
+.field-value{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;padding:6px 10px;border-radius:6px;border:1px solid transparent;transition:all .12s;}
+.field-value.clickable{cursor:pointer;}
+.field-value.state-verified{background:var(--verified-bg);color:var(--verified);}
+.field-value.state-review{background:var(--review-bg);color:var(--review);}
+.field-value.state-locked{background:var(--locked-bg);color:var(--locked);cursor:not-allowed;}
+.field-value.state-editable{background:#fff;border:1px solid var(--line-strong);color:var(--ink);}
+.field-value.active-trace{outline:2px solid var(--ink);outline-offset:2px;}
+.field-conf{font-size:10.5px;color:var(--slate-light);width:78px;text-align:right;flex-shrink:0;}
+
+.trace-anchor{position:absolute;right:-11px;top:50%;width:6px;height:6px;border-radius:50%;background:var(--ink);transform:translateY(-50%);opacity:0;transition:opacity .15s;}
+.field-row.tracing .trace-anchor{opacity:1;}
+
+.source-panel{position:sticky;top:76px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+.source-panel-head{padding:14px 18px;border-bottom:1px solid var(--line);}
+.source-doc-thumb{margin:16px;border:1px solid var(--line-strong);border-radius:8px;background:#FDFDFB;min-height:280px;padding:18px;position:relative;font-size:10.5px;color:#9AA0AC;line-height:1.7;box-shadow:var(--shadow);}
+.doc-highlight{position:absolute;background:rgba(156,107,18,0.14);border:1.5px solid var(--review);border-radius:3px;transition:all .25s ease;}
+.source-empty{margin:16px;padding:40px 20px;text-align:center;color:var(--slate-light);font-size:12.5px;border:1.5px dashed var(--line-strong);border-radius:8px;}
+.calc-note{margin:0 18px 18px 18px;padding:12px 14px;background:var(--paper-dim);border-radius:8px;font-size:12px;color:var(--ink-soft);}
+.calc-note b{font-weight:600;}
+
+#trace-svg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;}
+.trace-path{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 3;opacity:0;transition:opacity .25s;}
+.trace-path.show{opacity:0.5;}
+
+.ai-panel-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.ai-mark{width:20px;height:20px;border-radius:5px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ai-mark svg{width:11px;height:11px;}
+.conf-bar-track{height:5px;background:var(--paper-dim);border-radius:3px;overflow:hidden;margin:6px 0 10px 0;}
+.conf-bar-fill{height:100%;border-radius:3px;}
+.ai-actions{display:flex;gap:8px;margin-top:12px;}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(18,33,61,0.4);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(2px);}
+.modal-overlay.show{display:flex;}
+.modal{background:#fff;border-radius:12px;width:460px;max-width:92vw;box-shadow:var(--shadow-lg);overflow:hidden;}
+.modal-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+.modal-body{padding:20px;}
+.modal-foot{padding:16px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;background:var(--paper-dim);}
+textarea.correction-input{width:100%;border:1px solid var(--line-strong);border-radius:7px;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;resize:vertical;min-height:70px;}
+
+.hint{font-size:12px;color:var(--slate-light);margin-top:2px;}
+.legend{display:flex;gap:16px;flex-wrap:wrap;padding:12px 18px;background:var(--paper-dim);border-top:1px solid var(--line);font-size:11.5px;color:var(--slate);border-radius:0 0 10px 10px;}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-swatch{width:10px;height:10px;border-radius:3px;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);z-index:200;display:none;align-items:center;gap:8px;}
+.toast.show{display:flex;}
+.toast .dot{width:6px;height:6px;border-radius:50%;background:var(--verified);}
+
+.view{display:none;}
+.view.active{display:block;}
+
+@media (max-width:900px){
+  .sidebar{width:72px;}
+  .brand-name,.brand-sub,.nav-label,.nav-item span:not(.dot),.role-switch-label,.user-chip-name,.user-chip-role,.firm-footer,.role-pill{display:none;}
+  .review-layout{grid-template-columns:1fr;}
+  .source-panel{position:static;}
+  .stat-row{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <nav class="sidebar">
+    <div class="brand">
+      <div class="brand-name">GG CPA Services</div>
+      <div class="brand-sub">Meridian Client Platform</div>
+    </div>
+
+    <div class="nav-label">Workspace</div>
+    <button class="nav-item active" data-view="dashboard" onclick="showView('dashboard')">Dashboard</button>
+    <button class="nav-item" data-view="review" onclick="goToReturn('r1')">Return Review</button>
+    <button class="nav-item" disabled style="opacity:0.4;cursor:default;">Documents</button>
+    <button class="nav-item" disabled style="opacity:0.4;cursor:default;">Client Messages</button>
+    <button class="nav-item" disabled style="opacity:0.4;cursor:default;">Client List</button>
+
+    <div class="role-switch">
+      <div class="role-switch-label">Viewing as</div>
+      <div class="role-pill-group">
+        <button class="role-pill active" id="pill-preparer" onclick="setRole('preparer')">Preparer</button>
+        <button class="role-pill" id="pill-manager" onclick="setRole('manager')">Manager</button>
+      </div>
+      <div class="user-chip">
+        <div class="avatar" id="role-avatar">MC</div>
+        <div>
+          <div class="user-chip-name" id="role-name">Maria Cordero, EA</div>
+          <div class="user-chip-role" id="role-title">Senior Preparer</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="firm-footer">
+      1 Eves Drive, Suite 111<br>
+      Marlton, NJ 08053<br>
+      856 219 4100
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="breadcrumb" id="breadcrumb"><b>Dashboard</b></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-sm" onclick="alert('Search is not wired up in this prototype.')">Search</button>
+        <button class="btn btn-primary btn-sm" onclick="alert('This prototype does not write new records. No backend is connected.')">New Return</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="view active" id="view-dashboard"></div>
+      <div class="view" id="view-review"></div>
+    </div>
+  </div>
+</div>
+
+<svg id="trace-svg"><path id="trace-path" class="trace-path" d=""/></svg>
+
+<div class="modal-overlay" id="correct-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div style="font-weight:600;font-size:15px;">Correct this value</div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button>
+    </div>
+    <div class="modal-body">
+      <div class="hint" style="margin-bottom:10px;">Your correction is saved as the current value. The original AI read stays in the field history and is never deleted.</div>
+      <div style="font-size:12px;color:var(--slate);margin-bottom:4px;">Field</div>
+      <div class="mono" style="font-weight:600;margin-bottom:14px;" id="modal-field-name">-</div>
+      <div style="font-size:12px;color:var(--slate);margin-bottom:6px;">Corrected value</div>
+      <textarea class="correction-input" id="modal-input"></textarea>
+      <div style="font-size:11.5px;color:var(--slate-light);margin-top:8px;">Original AI read: <span class="mono" id="modal-original"></span></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="applyCorrection()">Save correction</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toast-text">Saved</span></div>
+
+<script>
+/* All data below is fabricated for this prototype. No real client information,
+   tax figures, or documents are represented. */
+
+const RETURNS = [
+  {id:'r1', client:'Renata Solis', type:'1040 - Individual', amount:16240, status:'needs_review', flag:'urgent', reason:'2 fields below confidence threshold', updated:'12 min ago', preparer:'Maria Cordero', city:'Cherry Hill, NJ'},
+  {id:'r2', client:'Ashford Bakery Group LLC', type:'1120-S - S-Corp', amount:118400, status:'in_progress', flag:'urgent', reason:'Client response overdue 4 days', updated:'40 min ago', preparer:'Maria Cordero', city:'Marlton, NJ'},
+  {id:'r3', client:'Devon Okafor', type:'1040 - Individual', amount:8760, status:'ready_for_review', flag:'soon', reason:'Ready for sign-off', updated:'2 hrs ago', preparer:'Tom Reilly', city:'Philadelphia, PA'},
+  {id:'r4', client:'Solis Family Dental', type:'1065 - Partnership', amount:54900, status:'in_progress', flag:'soon', reason:'Awaiting 2 documents', updated:'5 hrs ago', preparer:'Maria Cordero', city:'Cherry Hill, NJ'},
+  {id:'r5', client:'Priya Anand', type:'1040 - Individual', amount:5330, status:'on_track', flag:'ok', reason:'On track', updated:'1 day ago', preparer:'Tom Reilly', city:'Voorhees, NJ'},
+  {id:'r6', client:'Kessler Logistics Corp', type:'1120 - Corporation', amount:76200, status:'on_track', flag:'ok', reason:'On track', updated:'2 days ago', preparer:'Maria Cordero', city:'Camden, NJ'},
+];
+
+const FIELD_GROUPS = [
+  {
+    title: 'Income',
+    fields: [
+      {id:'f1', label:'Wages (Box 1, W-2 - Camden Regional Health)', value:'$81,420', state:'verified', conf:98,
+        doc:{name:'W-2 - Camden Regional Health', page:'Page 1 of 1', highlightLine:2, text:'Employer: Camden Regional Health\nBox 1 - Wages, tips, other comp:\n$81,420.00\nBox 2 - Federal income tax withheld:\n$12,610.00'},
+        calc:'Pulled directly from Box 1 of the uploaded W-2. No transformation applied.'},
+      {id:'f2', label:'Interest Income (1099-INT - TD Bank)', value:'$940', state:'review', conf:69,
+        doc:{name:'1099-INT - TD Bank', page:'Page 1 of 2', highlightLine:2, text:'TD Bank, N.A.\nBox 1 - Interest income:\n$940.18 (rounded)\nBox 3 - Interest on U.S. Savings Bonds:\npartially cut off in scan'},
+        calc:'Extracted from Box 1. Confidence lowered because Box 3 on the same form was partially unreadable in the scan, which flagged the whole document for a second look.'},
+      {id:'f3', label:'Self-Employment Income (Schedule C, net)', value:'$19,880', state:'editable', conf:null,
+        doc:{name:'Schedule C worksheet', page:'Preparer worksheet', highlightLine:2, text:'Gross receipts: $52,100\nLess: total expenses: $32,220\nNet profit: $19,880'},
+        calc:'Gross receipts minus itemized expenses, taken from the preparer worksheet. This figure is manually entered, not AI-extracted, and is editable by design.'},
+    ]
+  },
+  {
+    title: 'Deductions and Adjustments',
+    fields: [
+      {id:'f4', label:'Standard Deduction', value:'$29,200', state:'locked', conf:null,
+        doc:{name:'IRS Rev. Proc. 2025-32', page:'Standard deduction table', highlightLine:1, text:'2025 Standard Deduction\nMarried Filing Jointly: $29,200\nSingle: $14,600'},
+        calc:'Statutory standard deduction for Married Filing Jointly, 2025 tax year. Locked because this is a fixed IRS figure, not a judgment call.'},
+      {id:'f5', label:'HSA Contribution (Form 5498-SA)', value:'$3,850', state:'verified', conf:96,
+        doc:{name:'Form 5498-SA - Horizon HSA', page:'Page 1 of 1', highlightLine:2, text:'Horizon BCBS HealthSave HSA\nBox 2 - Total contributions:\n$3,850.00'},
+        calc:'Pulled directly from Box 2. Matches the IRS annual family contribution limit for the year, which supported a high-confidence read.'},
+    ]
+  },
+  {
+    title: 'Credits',
+    fields: [
+      {id:'f6', label:'Child Tax Credit (2 dependents)', value:'$4,000', state:'review', conf:62,
+        doc:{name:'Dependent worksheet, 2 sources', page:'Cross-referenced', highlightLine:1, text:'Dependent 1: Age 8 - qualifies, full credit\nDependent 2: Age 17 (as of Dec 31) - credit phases per age rule, confirm birthdate'},
+        calc:'Confidence lowered because one dependent turns 17 this tax year. The credit amount is age-sensitive, so the exact birthdate on file needs a human check before this is finalized.'},
+    ]
+  }
+];
+
+let currentField = null;
+let currentReturn = null;
+let currentHighlightLine = null;
+
+function setRole(role){
+  document.getElementById('pill-preparer').classList.toggle('active', role==='preparer');
+  document.getElementById('pill-manager').classList.toggle('active', role==='manager');
+  if(role==='manager'){
+    document.getElementById('role-avatar').textContent='VG';
+    document.getElementById('role-name').textContent='Victor Garrido, CPA, EA';
+    document.getElementById('role-title').textContent='Managing Member';
+  } else {
+    document.getElementById('role-avatar').textContent='MC';
+    document.getElementById('role-name').textContent='Maria Cordero, EA';
+    document.getElementById('role-title').textContent='Senior Preparer';
+  }
+  window.currentRole = role;
+  renderDashboard();
+}
+window.currentRole = 'preparer';
+
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const target = document.querySelector('.nav-item[data-view="'+name+'"]');
+  if(target) target.classList.add('active');
+  if(name==='dashboard'){
+    document.getElementById('breadcrumb').innerHTML = '<b>Dashboard</b>';
+    renderDashboard();
+  }
+}
+
+function goToReturn(id){
+  currentReturn = RETURNS.find(r=>r.id===id) || RETURNS[0];
+  showView('review');
+  document.querySelector('.nav-item[data-view="review"]').classList.add('active');
+  document.getElementById('breadcrumb').innerHTML =
+    '<a onclick="showView(\'dashboard\')" style="cursor:pointer;color:var(--slate-light);">Dashboard</a> <span style="color:var(--line-strong)">/</span> <b>'+currentReturn.client+'</b> <span style="color:var(--line-strong)">/</span> <span style="color:var(--slate)">Review</span>';
+  renderReview();
+}
+
+function urgencyScore(r){
+  let score = 0;
+  if(r.flag==='urgent') score += 100;
+  if(r.flag==='soon') score += 40;
+  if(r.status==='needs_review') score += 30;
+  if(r.status==='in_progress') score += 10;
+  return score;
+}
+
+let dashFilter = 'all';
+function setDashFilter(f){ dashFilter = f; renderDashboard(); }
+
+function renderDashboard(){
+  const sorted = [...RETURNS].sort((a,b)=>urgencyScore(b)-urgencyScore(a));
+  const filtered = dashFilter==='all' ? sorted :
+    dashFilter==='mine' ? sorted.filter(r=>r.preparer==='Maria Cordero') :
+    sorted.filter(r=>r.flag==='urgent');
+
+  const urgentCount = RETURNS.filter(r=>r.flag==='urgent').length;
+  const reviewCount = RETURNS.filter(r=>r.status==='needs_review'||r.status==='ready_for_review').length;
+  const totalValue = RETURNS.reduce((a,r)=>a+r.amount,0);
+
+  const managerNote = window.currentRole==='manager'
+    ? '<div class="panel-head-sub">Firm-wide queue across Maria Cordero and Tom Reilly</div>'
+    : '<div class="panel-head-sub">Your active queue, ranked by what needs you next</div>';
+
+  document.getElementById('view-dashboard').innerHTML =
+    '<div class="stat-row">' +
+      '<div class="stat-card danger"><div class="stat-num">'+urgentCount+'</div><div class="stat-label">Need attention today</div></div>' +
+      '<div class="stat-card warn"><div class="stat-num">'+reviewCount+'</div><div class="stat-label">Awaiting review or sign-off</div></div>' +
+      '<div class="stat-card"><div class="stat-num">'+RETURNS.length+'</div><div class="stat-label">'+(window.currentRole==='manager' ? 'Firm-wide open returns' : 'Returns in your queue')+'</div></div>' +
+      '<div class="stat-card"><div class="stat-num mono" style="font-size:22px;">$'+(totalValue/1000).toFixed(0)+'k</div><div class="stat-label">Total value in pipeline</div></div>' +
+    '</div>' +
+    '<div class="panel">' +
+      '<div class="panel-head">' +
+        '<div><h2>Priority Queue</h2>'+managerNote+'</div>' +
+        '<div class="filter-tabs">' +
+          '<button class="filter-tab '+(dashFilter==='all'?'active':'')+'" onclick="setDashFilter(\'all\')">All</button>' +
+          '<button class="filter-tab '+(dashFilter==='mine'?'active':'')+'" onclick="setDashFilter(\'mine\')">'+(window.currentRole==='manager'?"Maria's":'Mine')+'</button>' +
+          '<button class="filter-tab '+(dashFilter==='urgent'?'active':'')+'" onclick="setDashFilter(\'urgent\')">Urgent</button>' +
+        '</div>' +
+      '</div>' +
+      filtered.map(function(r){
+        return '<div class="queue-row" onclick="goToReturn(\''+r.id+'\')">' +
+          '<div class="priority-flag '+r.flag+'"></div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div class="queue-client">'+r.client+(window.currentRole==='manager' ? ' <span style="font-weight:400;color:var(--slate-light);font-size:11.5px;">- '+r.preparer+'</span>' : '')+'</div>' +
+            '<div class="queue-meta">'+r.type+' - '+r.city+' - updated '+r.updated+'</div>' +
+          '</div>' +
+          '<div class="queue-reason">'+r.reason+'</div>' +
+          '<div class="queue-amount">$'+r.amount.toLocaleString()+'</div>' +
+          '<div class="queue-arrow">-&gt;</div>' +
+        '</div>';
+      }).join('') +
+    '</div>' +
+    '<div class="hint" style="padding-left:2px;">Priority combines the urgency flag and return status, recomputed on every load against the mock queue above. A production version would also weight filing deadlines and time since last client contact.</div>';
+}
+
+function allFields(){
+  return FIELD_GROUPS.flatMap(function(g){ return g.fields; });
+}
+
+function renderReview(){
+  const groupsHtml = FIELD_GROUPS.map(function(group){
+    const rowsHtml = group.fields.map(function(f){
+      const clickAttr = f.state!=='locked'
+        ? "traceField('"+f.id+"')"
+        : "alert('This is a fixed statutory value and cannot be edited.')";
+      const editBtn = f.state!=='locked'
+        ? '<button class="btn btn-ghost btn-sm" style="padding:4px 6px;" onclick="event.stopPropagation();openCorrect(\''+f.id+'\')" title="Correct this value">Edit</button>'
+        : '<span class="hint" title="Fixed statutory value">Locked</span>';
+      return '<div class="field-row" id="row-'+f.id+'">' +
+        '<div class="field-label">'+f.label+'</div>' +
+        '<div class="field-conf">'+(f.conf!==null ? f.conf+'% confidence' : '')+'</div>' +
+        '<div class="field-value-wrap">' +
+          '<div class="field-value state-'+f.state+' '+(f.state!=='locked'?'clickable':'')+'" onclick="'+clickAttr+'">'+f.value+'</div>' +
+          editBtn +
+        '</div>' +
+        '<div class="trace-anchor" id="anchor-'+f.id+'"></div>' +
+      '</div>';
+    }).join('');
+    return '<div class="field-group"><div class="field-group-head">'+group.title+'</div>'+rowsHtml+'</div>';
+  }).join('');
+
+  document.getElementById('view-review').innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">' +
+      '<div><h1 style="margin:0;font-size:22px;">'+currentReturn.client+'</h1>' +
+      '<div class="hint">'+currentReturn.type+' - Tax Year 2025 - Click any value to trace it to its source</div></div>' +
+      '<div style="display:flex;gap:8px;"><button class="btn btn-sm">Request info from client</button><button class="btn btn-primary btn-sm">Mark reviewed</button></div>' +
+    '</div>' +
+    '<div class="legend">' +
+      '<div class="legend-item"><span class="legend-swatch" style="background:var(--verified-bg);border:1px solid var(--verified);"></span>AI-verified, high confidence</div>' +
+      '<div class="legend-item"><span class="legend-swatch" style="background:var(--review-bg);border:1px solid var(--review);"></span>Needs your review</div>' +
+      '<div class="legend-item"><span class="legend-swatch" style="background:#fff;border:1px solid var(--line-strong);"></span>Editable, human-entered</div>' +
+      '<div class="legend-item"><span class="legend-swatch" style="background:var(--locked-bg);border:1px solid var(--locked);"></span>Fixed, not editable</div>' +
+    '</div>' +
+    '<div class="review-layout" style="margin-top:16px;">' +
+      '<div>'+groupsHtml+'</div>' +
+      '<div class="source-panel" id="source-panel"><div class="source-empty" style="margin:60px 16px;">Click any field on the left to trace it back to its source document.</div></div>' +
+    '</div>';
+}
+
+function traceField(id){
+  const f = allFields().find(function(x){ return x.id===id; });
+  if(!f) return;
+
+  document.querySelectorAll('.field-value').forEach(function(el){ el.classList.remove('active-trace'); });
+  document.querySelectorAll('.field-row').forEach(function(el){ el.classList.remove('tracing'); });
+  const row = document.getElementById('row-'+id);
+  row.querySelector('.field-value').classList.add('active-trace');
+  row.classList.add('tracing');
+
+  const confColor = f.conf===null ? 'var(--locked)' : f.conf>=90 ? 'var(--verified)' : f.conf>=70 ? 'var(--review)' : 'var(--danger)';
+  const docLines = f.doc.text.split(String.fromCharCode(10)).map(function(l,i){ return '<div class="doc-line" data-idx="'+i+'">'+(l||'&nbsp;')+'</div>'; }).join('');
+
+  const aiPanel = f.conf!==null ?
+    '<div style="margin:0 18px 18px 18px;">' +
+      '<div class="ai-panel-head">' +
+        '<div class="ai-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div>' +
+        '<div style="font-size:12.5px;font-weight:600;">AI confidence</div>' +
+        '<div class="mono" style="margin-left:auto;font-size:12.5px;font-weight:600;color:'+confColor+';">'+f.conf+'%</div>' +
+      '</div>' +
+      '<div class="conf-bar-track"><div class="conf-bar-fill" style="width:'+f.conf+'%;background:'+confColor+';"></div></div>' +
+      '<div class="ai-actions">' +
+        '<button class="btn btn-sm" style="flex:1;" onclick="markVerified(\''+f.id+'\')">Looks right</button>' +
+        '<button class="btn btn-sm btn-primary" style="flex:1;" onclick="openCorrect(\''+f.id+'\')">Correct it</button>' +
+      '</div>' +
+    '</div>' : '';
+
+  document.getElementById('source-panel').innerHTML =
+    '<div class="source-panel-head"><div style="font-weight:600;font-size:13.5px;">'+f.doc.name+'</div><div class="hint">'+f.doc.page+'</div></div>' +
+    '<div class="source-doc-thumb" id="doc-thumb">'+docLines+'<div class="doc-highlight" id="doc-highlight" style="opacity:0;"></div></div>' +
+    '<div class="calc-note"><b>How this value was derived.</b> '+f.calc+'</div>' +
+    aiPanel;
+
+  currentHighlightLine = f.doc.highlightLine;
+  requestAnimationFrame(function(){ positionHighlight(currentHighlightLine); });
+  drawTraceLine(id);
+}
+
+/* Positions the highlight box using the real rendered position of the
+   target line, instead of a guessed coordinate, so it can never sit
+   outside the document panel regardless of content length or screen size. */
+function positionHighlight(lineIndex){
+  const thumb = document.getElementById('doc-thumb');
+  const highlight = document.getElementById('doc-highlight');
+  const line = thumb ? thumb.querySelector('.doc-line[data-idx="'+lineIndex+'"]') : null;
+  if(!thumb || !highlight || !line) return;
+  const pad = 3;
+  highlight.style.top = (line.offsetTop - pad) + 'px';
+  highlight.style.left = (line.offsetLeft - pad) + 'px';
+  highlight.style.width = (line.offsetWidth + pad*2) + 'px';
+  highlight.style.height = (line.offsetHeight + pad*2) + 'px';
+  highlight.style.opacity = '1';
+}
+
+function drawTraceLine(id){
+  const anchor = document.getElementById('anchor-'+id);
+  const panel = document.getElementById('source-panel');
+  if(!anchor || !panel) return;
+  const a = anchor.getBoundingClientRect();
+  const b = panel.getBoundingClientRect();
+  const x1 = a.left, y1 = a.top+a.height/2;
+  const x2 = b.left, y2 = b.top+70;
+  const midX = (x1+x2)/2;
+  const d = 'M '+x1+' '+y1+' C '+midX+' '+y1+', '+midX+' '+y2+', '+x2+' '+y2;
+  const path = document.getElementById('trace-path');
+  path.setAttribute('d', d);
+  path.classList.add('show');
+  clearTimeout(window._traceTimer);
+  window._traceTimer = setTimeout(function(){ path.classList.remove('show'); }, 1400);
+}
+
+function markVerified(id){
+  const f = allFields().find(function(x){ return x.id===id; });
+  f.state='verified';
+  showToast('Marked as verified');
+  renderReview();
+  setTimeout(function(){ traceField(id); }, 50);
+}
+
+function openCorrect(id){
+  currentField = allFields().find(function(x){ return x.id===id; });
+  document.getElementById('modal-field-name').textContent = currentField.label;
+  document.getElementById('modal-input').value = currentField.value;
+  document.getElementById('modal-original').textContent = currentField.value;
+  document.getElementById('correct-modal').classList.add('show');
+}
+function closeModal(){ document.getElementById('correct-modal').classList.remove('show'); }
+function applyCorrection(){
+  const newVal = document.getElementById('modal-input').value;
+  currentField.value = newVal;
+  currentField.state = 'verified';
+  currentField.conf = 100;
+  closeModal();
+  showToast('Correction saved. Original AI read kept in field history.');
+  renderReview();
+  setTimeout(function(){ traceField(currentField.id); }, 50);
+}
+
+function showToast(msg){
+  document.getElementById('toast-text').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2400);
+}
+
+renderDashboard();
+window.addEventListener('resize', function(){
+  document.getElementById('trace-path').classList.remove('show');
+  if(currentHighlightLine!==null) positionHighlight(currentHighlightLine);
+});
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(function(){
+    if(currentHighlightLine!==null) positionHighlight(currentHighlightLine);
+  });
+}
+</script>
+</body>
+</html>
